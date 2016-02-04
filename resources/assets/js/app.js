@@ -66,7 +66,7 @@ new Vue({
 		load: function(){
 			var self = this;
 
-			self.$http.get('http://localhost/crud_laravel/public/api/user').then(function (response) {
+			self.$http.get('http://localhost/laravel_vuejs/public/api/user').then(function (response) {
 	        	var chunk;
 	        	
 	        	Vue.set(self.users, 'all', response.data);
@@ -192,7 +192,7 @@ new Vue({
 			var valid = jQuery(this.$els.form).valid();
 			self.user.birth_date = moment(self.user.birth_date,'DD/MM/YYYY').format('YYYY-MM-DD');
 			if (valid){
-				self.$http.post('http://localhost/crud_laravel/public/api/user', self.user).then(function (response) {
+				self.$http.post('http://localhost/laravel_vuejs/public/api/user', self.user).then(function (response) {
 		        	jQuery(self.$els.modal).modal('hide');
 		        	self.load();
 		        	self.doResetAll();
@@ -223,7 +223,7 @@ new Vue({
 			var valid = jQuery(this.$els.form).valid();
 			self.user.birth_date = moment(self.user.birth_date,'DD/MM/YYYY').format('YYYY-MM-DD');
 			if (valid){			
-				self.$http.put('http://localhost/crud_laravel/public/api/user/'+self.user.id, self.user).then(function (response) {
+				self.$http.put('http://localhost/laravel_vuejs/public/api/user/'+self.user.id, self.user).then(function (response) {
 		        	jQuery(self.$els.modal).modal('hide');
 		        	self.load();
 		        	self.doResetAll();
@@ -237,7 +237,7 @@ new Vue({
 
 			Vue.http.options.emulateJSON = true;
 			if(confirm('Deseja deletar o usuario?')){
-				self.$http.delete('http://localhost/crud_laravel/public/api/user/'+id).then(function (response) {
+				self.$http.delete('http://localhost/laravel_vuejs/public/api/user/'+id).then(function (response) {
 		        	alert('Usuário removido com sucesso!');
 		        	self.load();
 		        	self.doResetAll();
@@ -326,7 +326,7 @@ new Vue({
 			var self = this;
 			var id = self.user.id;
 			var password = self.user.passwordEdit;
-			var url = 'http://localhost/crud_laravel/public/api/user/'+id+'/'+password;
+			var url = 'http://localhost/laravel_vuejs/public/api/user/'+id+'/'+password;
 			
 			jQuery(form).validate({
 				lang: 'pt_BR',
@@ -381,7 +381,7 @@ new Vue({
 			var valid = jQuery(this.$els.formChangePw).valid();
 
 			if (valid){			
-				self.$http.put('http://localhost/crud_laravel/public/api/user/'+self.user.id, {'password': self.user.passwordEdit}).then(function (response) {
+				self.$http.put('http://localhost/laravel_vuejs/public/api/user/'+self.user.id, {'password': self.user.passwordEdit}).then(function (response) {
 		        	jQuery(self.$els.modalChangePw).modal('hide');
 		        	self.load();
 		        	self.doResetAll();
