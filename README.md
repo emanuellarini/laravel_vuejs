@@ -1,8 +1,6 @@
 #**LARAVEL REST_API + VUEJS (Single Page Application)**
 
 
-----------
-
 
 ##**Considerações Iniciais**
 O material utilizado nesta aplicação foi retirado e adaptado dos seguintes links:
@@ -17,7 +15,6 @@ http://www.vedcasts.com.br/
 
 ##**Instruções de Instalação**
 
-----------
 
 Você deve, primeiramente, abrir seu Terminal, ler a lista e digitar os comandos nesta ordem: 
 
