@@ -38,7 +38,8 @@ new Vue({
 			filterTerm: '',
 			columnsToFilter: [],
 			visibleColumns: ['email', 'first_name','last_name', 'updated_at'],
-			saveAction: 'insert'
+			saveAction: 'insert',
+			isDatabasePassword: false
 		},
 		controls: {
 			select2: null
@@ -163,6 +164,7 @@ new Vue({
 			Vue.set(self.interaction, 'filterTerm', '');
 			Vue.set(self.interaction, 'columnsToFilter', []);
 			Vue.set(self.interaction, 'visibleColumns', ['email', 'first_name','last_name', 'updated_at']);
+			Vue.set(self.interaction, 'isDatabasePassword', false);
 
 			self.controls.select2.val('').trigger('change');
 		},
@@ -210,7 +212,7 @@ new Vue({
             this.user.first_name = user.first_name;
             this.user.last_name = user.last_name;
             this.user.mobile = user.mobile;
-            this.user.birth_date = user.birth_date;
+            this.user.birth_date = moment(user.birth_date,'YYYY-MM-DD').format('DD/MM/YYYY');
             this.user.password = user.password;
 			jQuery(self.$els.modal).modal('show');
 		},
@@ -251,38 +253,39 @@ new Vue({
 		        rules: {
 		            email: {
 						minlength: 3,
-		                maxlength: 15,
+		                maxlength: 40,
 		                required: true,
 		                email: true
 		            },
 					first_name: {
 						minlength: 3,
-		                maxlength: 15,
+		                maxlength: 20,
 		                required: true
 					},
 					last_name: {
 						minlength: 3,
-		                maxlength: 15,
+		                maxlength: 20,
 		                required: true
 					},
 					mobile: {
 						minlength: 3,
-		                maxlength: 15,
+		                maxlength: 20,
 		                required: true
 					},
 					birth_date: {
 						minlength: 3,
-		                maxlength: 15,
-		                required: true
+		                maxlength: 10,
+		                required: true,
+		                dateITA: true
 					},
 					password: {
 						minlength: 3,
-		                maxlength: 15,
+		                maxlength: 32,
 		                required: true
 					},
 					password_confirm: {
 						minlength: 3,
-		                maxlength: 15,
+		                maxlength: 32,
 		                required: true,
 				      	equalTo: "#password"
 				    }
@@ -317,45 +320,35 @@ new Vue({
 
 			this.user.email = user.email;
 			this.user.id = user.id;
-			this.user.password = '';
 			this.user.passwordEdit = '';
+			this.user.password = '';
+			jQuery(this.$els.formChangePw)[0].reset();
 			jQuery(self.$els.modalChangePw).modal('show');
 		},
 
-		validateChangePw: function(form){
-			var self = this;
-			var id = self.user.id;
-			var password = self.user.passwordEdit;
-			var url = 'http://localhost/laravel_vuejs/public/api/user/'+id+'/'+password;
-			
+		validateChangePw: function(form){		
 			jQuery(form).validate({
+				onfocusout: false,
+				onkeyup: false,
 				lang: 'pt_BR',
 		        rules: {
 					password_new: {
 						minlength: 3,
-		                maxlength: 15,
+		                maxlength: 32,
 		                required: true,
 					},
 					password_confirm: {
 						minlength: 3,
-		                maxlength: 15,
+		                maxlength: 32,
 		                required: true,
 				      	equalTo: "#password_new"
 				    },
 					password: {
 						minlength: 3,
-		                maxlength: 15,
-		                required: true,
-		                remote: {
-		                	url: url
-		                }
-					},
+		                maxlength: 32,
+		                required: true
+					}
 		        },
-		        messages: {
-			        password: {
-			            remote: "Senha incorreta!"
-			        }
-			    },
 		        highlight: function(element) {
 		            $(element).closest('.form-group').addClass('has-error');
 		        },
@@ -377,16 +370,32 @@ new Vue({
 		saveChangePw: function(ev){
 			ev.preventDefault();
 			var self = this;
-			self.validateChangePw(this.$els.formChangePw);
-			var valid = jQuery(this.$els.formChangePw).valid();
+			var form_validation = false;
 
-			if (valid){			
-				self.$http.put('http://localhost/laravel_vuejs/public/api/user/'+self.user.id, {'password': self.user.passwordEdit}).then(function (response) {
-		        	jQuery(self.$els.modalChangePw).modal('hide');
-		        	self.load();
-		        	self.doResetAll();
-		      	});			
-			}
+			var url = 'http://localhost/laravel_vuejs/public/api/user/'+self.user.id+'/'+self.user.passwordEdit;
+
+			self.$http.get(url).then(function (response) {
+				Vue.set(self.interaction, 'isDatabasePassword', JSON.stringify(response.data));
+	      	});				
+        	if (self.interaction.isDatabasePassword == false){
+        		$(this.$els.oldPassword).closest('.form-group').addClass('has-error');
+    			if(!jQuery('#password-error').length)
+    				$(this.$els.oldPassword).after('<span id="password-error" class="help-block">Senha incorreta!</span>');
+        	}
+        	else {
+        		$(this.$els.oldPassword).closest('.form-group').removeClass('has-error');
+        		$('#password-error').remove();
+        		self.validateChangePw(this.$els.formChangePw);
+				form_validation = jQuery(this.$els.formChangePw).valid();
+
+				if (form_validation){	
+					self.$http.put('http://localhost/laravel_vuejs/public/api/user/'+self.user.id, {"password": self.user.password}).then(function (response) {
+			        	jQuery(self.$els.modalChangePw).modal('hide');
+			        	self.load();
+			        	self.doResetAll();
+			      	});			
+				}
+        	}
 		}
 	}
 });

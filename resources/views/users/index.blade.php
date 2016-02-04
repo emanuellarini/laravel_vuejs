@@ -77,12 +77,12 @@
                       <div class="modal-body">
                                 <input type="hidden" v-model="user.id" class="form-control" name="id" id="id">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">E-mail:</label>
-                                    <input type="text" disabled v-model="user.email" class="form-control" name="email" id="email">
+                                    <label for="email" class="control-label">Email</label>
+                                    <p type="text" class="well well-sm" name="email" id="email">@{{ user.email }}</p>
                                 </div>
                                 <div class="form-group">
                                     <label for="password" class="control-label">Digite sua Senha:</label>
-                                    <input type="password" v-el:password-edit v-model="user.passwordEdit" class="form-control" name="password" id="password">
+                                    <input type="password" v-el:old-password v-model="user.passwordEdit" class="form-control" name="password" id="password">
                                 </div>
                                 <div class="form-group">
                                     <label for="password_new" class="control-label">Digite uma Nova Senha</label>
@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="password_confirm" class="control-label">Repita a Senha:</label>
-                                    <input type="password" v-model="user.password" class="form-control" name="password_confirm" id="password_confirm">
+                                    <input type="password" v-el:new-password v-model="user.password" class="form-control" name="password_confirm" id="password_confirm">
                                 </div>
                       </div>
                       <div class="modal-footer">
