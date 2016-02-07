@@ -15,7 +15,10 @@ class User extends Model
 		'last_name',
 		'mobile',
 		'birth_date',
-        'password'
+        'password',
+        'password_confirmation',
+        'new_password',
+        'new_password_confirmation',
 	];
 
     public function allUsers()
@@ -34,6 +37,8 @@ class User extends Model
     {
     	$input = Input::all();
     	$input['password'] = Hash::make($input['password']);
+        $input['birth_date'] = date('Y-m-d', strtotime($input['birth_date']));
+        unset($input['password_confirmation']);
     	$user = new User();
     	$user->fill($input);
     	$user->save();
@@ -44,10 +49,8 @@ class User extends Model
     	$user = self::find($id);
     	if (is_null($user))
     		return false;
-
 		$input = Input::all();
-		if (isset($input['password']))
-    		$input['password'] = Hash::make($input['password']);
+        $input['birth_date'] = date('Y-m-d', strtotime($input['birth_date']));
     	$user->fill($input);
     	$user->save();
     	return $user;
@@ -60,15 +63,20 @@ class User extends Model
     	}
     	return $user->delete();
     }
-    public function verifyPassword($id, $password)
+
+    public function updateUserPassword($id)
     {
         $user = self::find($id);
-        if (is_null($user)){
+        if (is_null($user)) {
             return false;
         }
-        if (Hash::check($password, $user->password))
-        {
-            return $user;
-        }
-    }    
+        $input = Input::all();
+        $input['new_password'] = Hash::make($input['new_password']);
+        $input['password'] = $input['new_password'];
+        unset($input['new_password']);
+        unset($input['new_password_confirmation']);
+        $user->fill($input);
+        $user->save();
+        return $user;
+    }
 }

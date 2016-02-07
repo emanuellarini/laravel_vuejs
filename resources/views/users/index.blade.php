@@ -21,6 +21,7 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title">Gerenciamento de Usuário</h4>
                             </div>
+                            <div id="errors"></div>
                             <div class="modal-body">
                                 <input v-if="interaction.saveAction == 'update'" type="hidden" v-model="user.id" class="form-control" name="id" id="id">
                                 <div class="form-group">
@@ -45,13 +46,14 @@
                                 </div>
                                 <div class="form-group" v-if="interaction.saveAction == 'insert'">
                                     <label for="password" class="control-label">Senha:</label>
-                                    <input type="password" class="form-control" name="password" id="password">
+                                    <input type="password" v-model="user.password" class="form-control" name="password" id="password">
                                 </div>
                                 <div class="form-group" v-if="interaction.saveAction == 'insert'">
-                                    <label for="password_confirm" class="control-label">Repita a Senha:</label>
-                                    <input type="password" v-model="user.password" class="form-control" name="password_confirm" id="password_confirm">
+                                    <label for="password_confirmation" class="control-label">Confirmar Senha:</label>
+                                    <input type="password" v-model="user.password_confirmation" class="form-control" name="password_confirmation" id="password_confirmation">
                                 </div>
                             </div>
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                                     <template v-if="interaction.saveAction == 'insert'" > 
@@ -61,6 +63,7 @@
                                     <button type="button" v-on:click="update" class="btn btn-primary">Salvar</button>
                                     </template>
                             </div>
+
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
@@ -75,27 +78,28 @@
                         <h4 class="modal-title">Mudança de senha</h4>
                       </div>
                       <div class="modal-body">
-                                <input type="hidden" v-model="user.id" class="form-control" name="id" id="id">
-                                <div class="form-group">
-                                    <label for="email" class="control-label">Email</label>
-                                    <p type="text" class="well well-sm" name="email" id="email">@{{ user.email }}</p>
-                                </div>
-                                <div class="form-group">
-                                    <label for="password" class="control-label">Digite sua Senha:</label>
-                                    <input type="password" v-el:old-password v-model="user.passwordEdit" class="form-control" name="password" id="password">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password_new" class="control-label">Digite uma Nova Senha</label>
-                                    <input type="password" class="form-control" name="password_new" id="password_new">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password_confirm" class="control-label">Repita a Senha:</label>
-                                    <input type="password" v-el:new-password v-model="user.password" class="form-control" name="password_confirm" id="password_confirm">
-                                </div>
+                            <div id="changepw_errors"></div>
+                            <input type="hidden" v-model="user.id" class="form-control" name="id" id="user_id">
+                            <div class="form-group">
+                                <label for="email" class="control-label">Email</label>
+                                <p type="text" class="well well-sm" name="email" id="email">@{{ user.email }}</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="control-label">Digite sua Senha:</label>
+                                <input type="password" v-model="user.password" class="form-control" name="password" id="password">
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password" class="control-label">Digite uma Nova Senha</label>
+                                <input type="password" v-model="user.new_password" class="form-control" name="new_password" id="new_password">
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password_confirmation" class="control-label">Repita a Senha:</label>
+                                <input type="password" v-model="user.new_password_confirmation" class="form-control" name="new_password_confirmation" id="new_password_confirmation">
+                            </div>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" v-on:click="saveChangePw($event, user.id)" class="btn btn-primary">Salvar</button>
+                        <button type="button" v-on:click="saveChangePw($event)" class="btn btn-primary">Salvar</button>
                       </div>
                     </div><!-- /.modal-content -->
                   </div><!-- /.modal-dialog -->

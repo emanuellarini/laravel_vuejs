@@ -18,7 +18,9 @@ new Vue({
 			mobile: '',
 			birth_date: '',
 			password: '',
-			passwordEdit: ''
+			password_confirmation: '',
+			new_password: '',
+			new_password_confirmation: ''
 		},
 		users: {
 			list: [],
@@ -66,8 +68,9 @@ new Vue({
 
 		load: function(){
 			var self = this;
+			var url = window.location.pathname+'api/user';
 
-			self.$http.get('http://localhost/laravel_vuejs/public/api/user').then(function (response) {
+			self.$http.get(url).then(function (response) {
 	        	var chunk;
 	        	
 	        	Vue.set(self.users, 'all', response.data);
@@ -156,7 +159,6 @@ new Vue({
 		doResetAll: function(){
 			var self = this;
 
-			//Vue.set(self.users, 'list', self.users.all);
 			Vue.set(self.pagination, 'perPage', '5');
 			self.setPaginationData(self.users.all);
 			Vue.set(self.interaction, 'sortColumn', 'email');
@@ -171,11 +173,7 @@ new Vue({
 
 		new: function(){
 			var self = this;
-			jQuery(self.$els.modal).on('hidden.bs.modal', function() {
-			    $(self.$els.form).validate().resetForm();
-			    $('.has-error').removeClass('has-error');
-			    $('.has-feedback').removeClass('has-feedback');
-			});
+			jQuery('#errors').empty();
 			self.user.id = '';
 			self.user.email = '';
 			self.user.first_name = '';
@@ -183,6 +181,7 @@ new Vue({
 			self.user.mobile = '';
 			self.user.birth_date = '';
 			self.user.password = '';
+			self.user.password_confirmation = '';
 			jQuery(self.$els.modal).modal('show');
 			Vue.set(self.interaction, 'saveAction', 'insert');
 		},
@@ -190,16 +189,29 @@ new Vue({
 		save: function(ev){
 			ev.preventDefault();
 			var self = this;
-			self.validate(this.$els.form);
-			var valid = jQuery(this.$els.form).valid();
-			self.user.birth_date = moment(self.user.birth_date,'DD/MM/YYYY').format('YYYY-MM-DD');
-			if (valid){
-				self.$http.post('http://localhost/laravel_vuejs/public/api/user', self.user).then(function (response) {
+			var url = window.location.href+'api/user';
+			var data = {
+				'email': self.user.email,
+				'first_name': self.user.first_name,
+				'last_name': self.user.last_name,
+				'mobile': self.user.mobile,
+				'birth_date': self.user.birth_date,
+				'password': self.user.password,
+				'password_confirmation': self.user.password_confirmation,
+			};
+
+				self.$http.post(url, data).then(function (response) {
 		        	jQuery(self.$els.modal).modal('hide');
 		        	self.load();
 		        	self.doResetAll();
-		      	});
-			}
+		      	}, function (response){
+		      		var errors = '';
+		      		_.forEach(response.data, function(value, key) {
+					  	errors += '<p>'+value+'</p>';
+					});
+		      		$('#errors').html('<div class="alert alert-danger" role="alert">'+errors+'</div>');
+		      	}
+		      	);
 		},
 
 		edit: function (ev, user){
@@ -207,6 +219,7 @@ new Vue({
 			var self = this;
 
 			Vue.set(self.interaction, 'saveAction', 'update');
+			jQuery('#errors').empty();
 			this.user.id = user.id;
             this.user.email = user.email;
             this.user.first_name = user.first_name;
@@ -220,26 +233,38 @@ new Vue({
 		update: function (ev){
 			ev.preventDefault();
 			var self = this;
+			var url = window.location.href+'api/user/'+self.user.id;
+			var data = {
+				'id': self.user.id,
+				'email': self.user.email,
+				'first_name': self.user.first_name,
+				'last_name': self.user.last_name,
+				'mobile': self.user.mobile,
+				'birth_date': self.user.birth_date,
+			};
+
 			Vue.http.options.emulateJSON = true;
-			self.validate(this.$els.form);
-			var valid = jQuery(this.$els.form).valid();
-			self.user.birth_date = moment(self.user.birth_date,'DD/MM/YYYY').format('YYYY-MM-DD');
-			if (valid){			
-				self.$http.put('http://localhost/laravel_vuejs/public/api/user/'+self.user.id, self.user).then(function (response) {
-		        	jQuery(self.$els.modal).modal('hide');
-		        	self.load();
-		        	self.doResetAll();
-		      	});			
-			}
+			self.$http.put(url, data).then(function (response) {
+	        	jQuery(self.$els.modal).modal('hide');
+	        	self.load();
+	        	self.doResetAll();
+	      	}, function (response){
+	      		var errors = '';
+	      		_.forEach(response.data, function(value, key) {
+				  	errors += '<p>'+value+'</p>';
+				});
+	      		$('#errors').html('<div class="alert alert-danger" role="alert">'+errors+'</div>');
+	      	});			
 		},
 
 		remove: function (ev, id){
 			ev.preventDefault();
 			var self = this;
+			var url = window.location.href+'api/user/'+id;
 
 			Vue.http.options.emulateJSON = true;
 			if(confirm('Deseja deletar o usuario?')){
-				self.$http.delete('http://localhost/laravel_vuejs/public/api/user/'+id).then(function (response) {
+				self.$http.delete(url).then(function (response) {
 		        	alert('Usuário removido com sucesso!');
 		        	self.load();
 		        	self.doResetAll();
@@ -247,77 +272,11 @@ new Vue({
 			}
 		},
 
-		validate: function(form){
-			jQuery(form).validate({
-				lang: 'pt_BR',
-		        rules: {
-		            email: {
-						minlength: 3,
-		                maxlength: 40,
-		                required: true,
-		                email: true
-		            },
-					first_name: {
-						minlength: 3,
-		                maxlength: 20,
-		                required: true
-					},
-					last_name: {
-						minlength: 3,
-		                maxlength: 20,
-		                required: true
-					},
-					mobile: {
-						minlength: 3,
-		                maxlength: 20,
-		                required: true
-					},
-					birth_date: {
-						minlength: 3,
-		                maxlength: 10,
-		                required: true,
-		                dateITA: true
-					},
-					password: {
-						minlength: 3,
-		                maxlength: 32,
-		                required: true
-					},
-					password_confirm: {
-						minlength: 3,
-		                maxlength: 32,
-		                required: true,
-				      	equalTo: "#password"
-				    }
-		        },
-		        highlight: function(element) {
-		            $(element).closest('.form-group').addClass('has-error');
-		        },
-		        unhighlight: function(element) {
-		            $(element).closest('.form-group').removeClass('has-error');
-		        },
-		        errorElement: 'span',
-		        errorClass: 'help-block',
-		        errorPlacement: function(error, element) {
-		            if(element.parent('.input-group').length) {
-		                error.insertAfter(element.parent());
-		            } else {
-		                error.insertAfter(element);
-		            }
-		        }
-		    });
-		},
-
 		changePassword: function(ev, user){
 			ev.preventDefault();
 			var self = this;
 
-			jQuery(self.$els.modalChangePw).on('hidden.bs.modal', function() {
-			    $(self.$els.formChangePw).validate().resetForm();
-			    $('.has-error').removeClass('has-error');
-			    $('.has-feedback').removeClass('has-feedback');
-			});
-
+			jQuery('#changepw_errors').empty();
 			this.user.email = user.email;
 			this.user.id = user.id;
 			this.user.passwordEdit = '';
@@ -326,76 +285,29 @@ new Vue({
 			jQuery(self.$els.modalChangePw).modal('show');
 		},
 
-		validateChangePw: function(form){		
-			jQuery(form).validate({
-				onfocusout: false,
-				onkeyup: false,
-				lang: 'pt_BR',
-		        rules: {
-					password_new: {
-						minlength: 3,
-		                maxlength: 32,
-		                required: true,
-					},
-					password_confirm: {
-						minlength: 3,
-		                maxlength: 32,
-		                required: true,
-				      	equalTo: "#password_new"
-				    },
-					password: {
-						minlength: 3,
-		                maxlength: 32,
-		                required: true
-					}
-		        },
-		        highlight: function(element) {
-		            $(element).closest('.form-group').addClass('has-error');
-		        },
-		        unhighlight: function(element) {
-		            $(element).closest('.form-group').removeClass('has-error');
-		        },
-		        errorElement: 'span',
-		        errorClass: 'help-block',
-		        errorPlacement: function(error, element) {
-		            if(element.parent('.input-group').length) {
-		                error.insertAfter(element.parent());
-		            } else {
-		                error.insertAfter(element);
-		            }
-		        }
-		    });
-		},
-
 		saveChangePw: function(ev){
 			ev.preventDefault();
 			var self = this;
-			var form_validation = false;
 
-			var url = 'http://localhost/laravel_vuejs/public/api/user/'+self.user.id+'/'+self.user.passwordEdit;
+			var url = window.location.href+'api/user/'+self.user.id+'/changepw';
+			var data = { 
+					'password': self.user.password, 
+					'new_password': self.user.new_password, 
+					'new_password_confirmation': self.user.new_password_confirmation
+			};
 
-			self.$http.get(url).then(function (response) {
-				Vue.set(self.interaction, 'isDatabasePassword', JSON.stringify(response.data));
-	      	});				
-        	if (self.interaction.isDatabasePassword == false){
-        		$(this.$els.oldPassword).closest('.form-group').addClass('has-error');
-    			if(!jQuery('#password-error').length)
-    				$(this.$els.oldPassword).after('<span id="password-error" class="help-block">Senha incorreta!</span>');
-        	}
-        	else {
-        		$(this.$els.oldPassword).closest('.form-group').removeClass('has-error');
-        		$('#password-error').remove();
-        		self.validateChangePw(this.$els.formChangePw);
-				form_validation = jQuery(this.$els.formChangePw).valid();
-
-				if (form_validation){	
-					self.$http.put('http://localhost/laravel_vuejs/public/api/user/'+self.user.id, {"password": self.user.password}).then(function (response) {
-			        	jQuery(self.$els.modalChangePw).modal('hide');
-			        	self.load();
-			        	self.doResetAll();
-			      	});			
-				}
-        	}
+				self.$http.put(url, data).then(function (response) {
+		        	jQuery(self.$els.modalChangePw).modal('hide');
+		        	self.load();
+		        	self.doResetAll();
+		      	}, function (response){
+		      		var errors = '';
+		      		_.forEach(response.data, function(value, key) {
+					  	errors += '<p>'+value+'</p>';
+					});
+		      		$('#changepw_errors').html('<div class="alert alert-danger" role="alert">'+errors+'</div>');
+		      	});						
 		}
+
 	}
 });

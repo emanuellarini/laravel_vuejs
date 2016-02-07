@@ -21,9 +21,6 @@ elixir(function(mix) {
         '/../../../node_modules/lodash/lodash.js',
         '/../../../node_modules/select2/dist/js/select2.js',
         '/../../../node_modules/jquery-mask-plugin/dist/jquery.mask.js',
-        '/../../../node_modules/jquery-validation/dist/jquery.validate.js',
-        '/../../../node_modules/jquery-validation/dist/additional-methods.js',
-        '/../../../node_modules/jquery-validation/dist/localization/messages_pt_BR.js',
     	'app.js'
     	], 'public/js/app.js');
 
