@@ -5,6 +5,11 @@ Vue.filter('formatBirthDate', function(value){
 	return moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY');
 });
 
+$(".close-alert").click(function(ev){
+	ev.preventDefault();
+    $(".alert").alert('hide');
+});
+
 new Vue({
 
 	el: '#crud',
@@ -204,14 +209,14 @@ new Vue({
 		        	jQuery(self.$els.modal).modal('hide');
 		        	self.load();
 		        	self.doResetAll();
-		      	}, function (response){
+					jQuery('#success').html('<div class="alert alert-success fade in"><button class="close alert-close" data-dismiss="alert">&times;</button>Usuário salvo com sucesso.</div>');		      	
+				}, function (response){		      		
 		      		var errors = '';
 		      		_.forEach(response.data, function(value, key) {
 					  	errors += '<p>'+value+'</p>';
 					});
-		      		$('#errors').html('<div class="alert alert-danger" role="alert">'+errors+'</div>');
-		      	}
-		      	);
+		      		$('#errors').html('<div class="alert alert-danger fade in">'+errors+'</div>');
+		      	});
 		},
 
 		edit: function (ev, user){
@@ -235,7 +240,6 @@ new Vue({
 			var self = this;
 			var url = window.location.href+'api/user/'+self.user.id;
 			var data = {
-				'id': self.user.id,
 				'email': self.user.email,
 				'first_name': self.user.first_name,
 				'last_name': self.user.last_name,
@@ -248,13 +252,15 @@ new Vue({
 	        	jQuery(self.$els.modal).modal('hide');
 	        	self.load();
 	        	self.doResetAll();
+	        	jQuery('#success').html('<div class="alert alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>Dados do Usuário salvos com sucesso.</div>');
 	      	}, function (response){
 	      		var errors = '';
+	      		console.log(response.data);
 	      		_.forEach(response.data, function(value, key) {
 				  	errors += '<p>'+value+'</p>';
 				});
-	      		$('#errors').html('<div class="alert alert-danger" role="alert">'+errors+'</div>');
-	      	});			
+		      	$('#errors').html('<div class="alert alert-danger fade in" role="alert">'+errors+'</div>');	      	
+		    });			
 		},
 
 		remove: function (ev, id){
@@ -265,10 +271,10 @@ new Vue({
 			Vue.http.options.emulateJSON = true;
 			if(confirm('Deseja deletar o usuario?')){
 				self.$http.delete(url).then(function (response) {
-		        	alert('Usuário removido com sucesso!');
 		        	self.load();
 		        	self.doResetAll();
-		      	});			
+					jQuery('#success').html('<div class="alert alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>Usuário removido com sucesso.</div>');		      	
+				});			
 			}
 		},
 
@@ -300,12 +306,14 @@ new Vue({
 		        	jQuery(self.$els.modalChangePw).modal('hide');
 		        	self.load();
 		        	self.doResetAll();
+					jQuery('#success').html('<div class="alert alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>Senha modificada com sucesso.</div>');
 		      	}, function (response){
+		      		console.log(response.data);
 		      		var errors = '';
 		      		_.forEach(response.data, function(value, key) {
 					  	errors += '<p>'+value+'</p>';
 					});
-		      		$('#changepw_errors').html('<div class="alert alert-danger" role="alert">'+errors+'</div>');
+		      		$('#changepw_errors').html('<div class="alert alert-danger fade in" role="alert">'+errors+'</div>');
 		      	});						
 		}
 

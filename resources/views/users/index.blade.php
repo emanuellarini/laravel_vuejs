@@ -12,6 +12,9 @@
 
             <div class="page-header text-center">
                 <h1>SPA - GERENCIAMENTO DE USUÁRIOS</h1>
+            </div>
+            <div class="row">
+                <div id="success" class="bs-example"></div>
             </div>   
             <form id="form" v-el:form>
                 <div v-el:modal class="modal fade" tabindex="-1" role="dialog">
@@ -21,8 +24,8 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title">Gerenciamento de Usuário</h4>
                             </div>
-                            <div id="errors"></div>
                             <div class="modal-body">
+                                <div id="errors" class="bs-example col-md-10"></div>
                                 <input v-if="interaction.saveAction == 'update'" type="hidden" v-model="user.id" class="form-control" name="id" id="id">
                                 <div class="form-group">
                                     <label for="email" class="control-label">E-mail:</label>
@@ -78,7 +81,7 @@
                         <h4 class="modal-title">Mudança de senha</h4>
                       </div>
                       <div class="modal-body">
-                            <div id="changepw_errors"></div>
+                            <div id="changepw_errors" class="bs-example"></div>
                             <input type="hidden" v-model="user.id" class="form-control" name="id" id="user_id">
                             <div class="form-group">
                                 <label for="email" class="control-label">Email</label>
