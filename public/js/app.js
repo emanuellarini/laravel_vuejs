@@ -47798,9 +47798,12 @@ new Vue({
 	      	});
 
 			self.controls.select2 = jQuery(self.$els.columnsToFilterSelect).select2({
-				placeholder: 'Se desejar selecione uma ou mais colunas para filtrar'
+				placeholder: 'Selecione uma ou mais colunas para filtrar!'
 			}).on('change', function(){
-				Vue.set(self.interaction, 'columnsToFilter', jQuery(this).val());
+				if (!jQuery(this).val())
+					Vue.set(self.interaction, 'columnsToFilter', []);
+				else
+					Vue.set(self.interaction, 'columnsToFilter', jQuery(this).val());
 			});
 		},
 
@@ -47861,12 +47864,13 @@ new Vue({
 		doFilter: function(){
 			var self = this;
 
-			filtered = self.users.all;
+			var filtered = self.users.all;
 
+			console.log(self.interaction.columnsToFilter.length);
 			if (self.interaction.filterTerm != '' && self.interaction.columnsToFilter.length > 0){
 				filtered = _.filter(self.users.all, function(user){
 					return self.interaction.columnsToFilter.some(function(column){
-						return user[column].toLowerCase().indexOf(self.interaction.filterTerm.toLowerCase()) > -1;
+						return user[column].toLowerCase().indexOf(self.interaction.filterTerm.toLowerCase()) > -1
 					});
 				});
 			}	

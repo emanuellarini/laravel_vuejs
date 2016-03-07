@@ -25,7 +25,7 @@
                                 <h4 class="modal-title">Gerenciamento de Usuário</h4>
                             </div>
                             <div class="modal-body">
-                                <div id="errors" class="bs-example col-md-10"></div>
+                                <div id="errors" class="bs-example"></div>
                                 <input v-if="interaction.saveAction == 'update'" type="hidden" v-model="user.id" class="form-control" name="id" id="id">
                                 <div class="form-group">
                                     <label for="email" class="control-label">E-mail:</label>
@@ -152,7 +152,7 @@
                                 </select>
                             </div>                        
                             <div class="col-md-6">
-                                <input v-on:keyup="doFilter" v-model="interaction.filterTerm" type="text" class="form-control" placeholder="Digite para filtrar"/>
+                                <input v-on:keyup="doFilter" v-model="interaction.filterTerm" type="text" class="form-control" placeholder="Digite as palavras a serem pesquisadas"/>
                             </div>
                         </div>
 
@@ -227,7 +227,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="user in users.list | orderBy interaction.sortColumn interaction.sortReverse">
+                            <tr v-for="user in users.list | orderBy interaction.sortColumn interaction.sortReverse">        
                                 <td v-show="interaction.visibleColumns.indexOf('email') > -1">@{{ user.email }}</td>
                                 <td v-show="interaction.visibleColumns.indexOf('first_name') > -1">@{{ user.first_name }}</td>
                                 <td v-show="interaction.visibleColumns.indexOf('last_name') > -1">@{{ user.last_name }}</td>
