@@ -1,9 +1,6 @@
 Vue.filter('formatDate', function(value){
 	return moment(value, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
 });
-Vue.filter('formatBirthDate', function(value){
-	return moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY');
-});
 
 $(".close-alert").click(function(ev){
 	ev.preventDefault();
@@ -77,7 +74,7 @@ new Vue({
 
 			self.$http.get(url).then(function (response) {
 	        	var chunk;
-	        	
+
 	        	Vue.set(self.users, 'all', response.data);
 
 	        	self.setPaginationData(self.users.all);
@@ -160,7 +157,7 @@ new Vue({
 						return user[column].toLowerCase().indexOf(self.interaction.filterTerm.toLowerCase()) > -1
 					});
 				});
-			}	
+			}
 
 			self.setPaginationData(filtered);
 		},
@@ -213,8 +210,8 @@ new Vue({
 		        	jQuery(self.$els.modal).modal('hide');
 		        	self.load();
 		        	self.doResetAll();
-					jQuery('#success').html('<div class="alert alert-success fade in"><button class="close alert-close" data-dismiss="alert">&times;</button>Usuário salvo com sucesso.</div>');		      	
-				}, function (response){		      		
+					jQuery('#success').html('<div class="alert alert-success fade in"><button class="close alert-close" data-dismiss="alert">&times;</button>Usuário salvo com sucesso.</div>');
+				}, function (response){
 		      		var errors = '';
 		      		_.forEach(response.data, function(value, key) {
 					  	errors += '<p>'+value+'</p>';
@@ -263,8 +260,8 @@ new Vue({
 	      		_.forEach(response.data, function(value, key) {
 				  	errors += '<p>'+value+'</p>';
 				});
-		      	$('#errors').html('<div class="alert alert-danger fade in" role="alert">'+errors+'</div>');	      	
-		    });			
+		      	$('#errors').html('<div class="alert alert-danger fade in" role="alert">'+errors+'</div>');
+		    });
 		},
 
 		remove: function (ev, id){
@@ -277,8 +274,8 @@ new Vue({
 				self.$http.delete(url).then(function (response) {
 		        	self.load();
 		        	self.doResetAll();
-					jQuery('#success').html('<div class="alert alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>Usuário removido com sucesso.</div>');		      	
-				});			
+					jQuery('#success').html('<div class="alert alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>Usuário removido com sucesso.</div>');
+				});
 			}
 		},
 
@@ -300,9 +297,9 @@ new Vue({
 			var self = this;
 
 			var url = window.location.href+'api/user/'+self.user.id+'/changepw';
-			var data = { 
-					'password': self.user.password, 
-					'new_password': self.user.new_password, 
+			var data = {
+					'password': self.user.password,
+					'new_password': self.user.new_password,
 					'new_password_confirmation': self.user.new_password_confirmation
 			};
 
@@ -318,7 +315,7 @@ new Vue({
 					  	errors += '<p>'+value+'</p>';
 					});
 		      		$('#changepw_errors').html('<div class="alert alert-danger fade in" role="alert">'+errors+'</div>');
-		      	});						
+		      	});
 		}
 
 	}

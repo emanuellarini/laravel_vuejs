@@ -15,7 +15,7 @@
             </div>
             <div class="row">
                 <div id="success" class="bs-example"></div>
-            </div>   
+            </div>
             <form id="form" v-el:form>
                 <div v-el:modal class="modal fade" tabindex="-1" role="dialog">
                     <div class="modal-dialog">
@@ -59,10 +59,10 @@
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                                    <template v-if="interaction.saveAction == 'insert'" > 
+                                    <template v-if="interaction.saveAction == 'insert'" >
                                         <button type="button" v-on:click="save" class="btn btn-primary">Salvar</button>
                                     </template>
-                                    <template v-if="interaction.saveAction == 'update'" > 
+                                    <template v-if="interaction.saveAction == 'update'" >
                                     <button type="button" v-on:click="update" class="btn btn-primary">Salvar</button>
                                     </template>
                             </div>
@@ -72,7 +72,7 @@
                 </div><!-- /.modal -->
             </form>
 
-            <form id="form_changepw" v-el:form-change-pw>  
+            <form id="form_changepw" v-el:form-change-pw>
                 <div v-el:modal-change-pw class="modal fade" tabindex="-1" role="dialog">
                   <div class="modal-dialog">
                     <div class="modal-content">
@@ -120,7 +120,7 @@
                             <option value="mobile">Telefone</option>
                             <option value="birth_date">Data de Nascimento</option>
                             <option value="updated_at">Atualizado em</option>
-                        </select>         
+                        </select>
                     </div>
                     <div class="well">
                         <label>Quantidade por Página</label>
@@ -129,14 +129,14 @@
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
-                        </select>    
+                        </select>
                     </div>
                     <div class="well">
                         <button v-on:click="doResetAll" class="btn btn-default btn-block">Reset Geral</button>
-                    </div>   
+                    </div>
                     <div class="well">
                         <button v-on:click="new" class="btn btn-primary btn-block">Novo Usuário</button>
-                    </div>         
+                    </div>
                 </div>
                 <div class="col-md-10">
                     <div class="well">
@@ -150,7 +150,7 @@
                                     <option value="birth_date">Data de Nascimento</option>
                                     <option value="updated_at">Atualizado em</option>
                                 </select>
-                            </div>                        
+                            </div>
                             <div class="col-md-6">
                                 <input v-on:keyup="doFilter" v-model="interaction.filterTerm" type="text" class="form-control" placeholder="Digite as palavras a serem pesquisadas"/>
                             </div>
@@ -164,7 +164,7 @@
                             <tr>
                                 <th v-show="interaction.visibleColumns.indexOf('email') > -1">
                                     <i class="fa fa-fw fa-sort"
-                                        v-bind:class="{ 
+                                        v-bind:class="{
                                             'fa-sort-amount-asc': interaction.sortColumn == 'email' && interaction.sortReverse == 1,
                                             'fa-sort-amount-desc': interaction.sortColumn == 'email' && interaction.sortReverse == -1
                                             }"
@@ -174,7 +174,7 @@
 
                                 <th v-show="interaction.visibleColumns.indexOf('first_name') > -1">
                                     <i class="fa fa-fw fa-sort"
-                                        v-bind:class="{ 
+                                        v-bind:class="{
                                             'fa-sort-amount-asc': interaction.sortColumn == 'first_name' && interaction.sortReverse == 1,
                                             'fa-sort-amount-desc': interaction.sortColumn == 'first_name' && interaction.sortReverse == -1
                                             }"
@@ -184,17 +184,17 @@
 
                                 <th v-show="interaction.visibleColumns.indexOf('last_name') > -1">
                                     <i class="fa fa-fw fa-sort"
-                                        v-bind:class="{ 
+                                        v-bind:class="{
                                             'fa-sort-amount-asc': interaction.sortColumn == 'last_name' && interaction.sortReverse == 1,
                                             'fa-sort-amount-desc': interaction.sortColumn == 'last_name' && interaction.sortReverse == -1
                                             }"
                                     ></i>
                                     <a href="#" v-on:click="doSort($event, 'last_name')">Sobrenome</a>
-                                </th>                        
+                                </th>
 
                                 <th v-show="interaction.visibleColumns.indexOf('mobile') > -1">
                                     <i class="fa fa-fw fa-sort"
-                                        v-bind:class="{ 
+                                        v-bind:class="{
                                             'fa-sort-amount-asc': interaction.sortColumn == 'mobile' && interaction.sortReverse == 1,
                                             'fa-sort-amount-desc': interaction.sortColumn == 'mobile' && interaction.sortReverse == -1
                                             }"
@@ -204,17 +204,17 @@
 
                                 <th v-show="interaction.visibleColumns.indexOf('birth_date') > -1">
                                     <i class="fa fa-fw fa-sort"
-                                        v-bind:class="{ 
+                                        v-bind:class="{
                                             'fa-sort-amount-asc': interaction.sortColumn == 'birth_date' && interaction.sortReverse == 1,
                                             'fa-sort-amount-desc': interaction.sortColumn == 'birth_date' && interaction.sortReverse == -1
                                             }"
                                     ></i>
                                     <a href="#" v-on:click="doSort($event, 'birth_date')">Data de Nascimento</a>
-                                </th>                        
+                                </th>
 
                                 <th v-show="interaction.visibleColumns.indexOf('updated_at') > -1">
                                     <i class="fa fa-fw fa-sort"
-                                        v-bind:class="{ 
+                                        v-bind:class="{
                                             'fa-sort-amount-asc':interaction.sortColumn == 'updated_at' && interaction.sortReverse == 1,
                                             'fa-sort-amount-desc': interaction.sortColumn == 'updated_at' && interaction.sortReverse == -1
                                             }"
@@ -227,7 +227,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="user in users.list | orderBy interaction.sortColumn interaction.sortReverse">        
+                            <tr v-for="user in users.list | orderBy interaction.sortColumn interaction.sortReverse">
                                 <td v-show="interaction.visibleColumns.indexOf('email') > -1">@{{ user.email }}</td>
                                 <td v-show="interaction.visibleColumns.indexOf('first_name') > -1">@{{ user.first_name }}</td>
                                 <td v-show="interaction.visibleColumns.indexOf('last_name') > -1">@{{ user.last_name }}</td>
@@ -252,7 +252,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    
+
                     <nav class="text-center">
                       <ul class="pagination">
                         <li v-bind:class="{ 'disabled' : pagination.currentPage == 1 }" >
@@ -274,7 +274,7 @@
             </div>
         </div>
 
-            
+
 
         <script src="{!! asset('js/app.js') !!}"></script>
     </body>

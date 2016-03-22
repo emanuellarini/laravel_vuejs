@@ -51,7 +51,7 @@ class User extends Model
     	if (is_null($user))
     		return false;
 		$input = Input::all();
-        $input['birth_date'] = date('Y-m-d', strtotime($input['birth_date']));
+        $input['birth_date'] = Carbon::createFromFormat('d/m/Y', $input['birth_date']);
     	$user->fill($input);
     	$user->save();
     	return $user;
