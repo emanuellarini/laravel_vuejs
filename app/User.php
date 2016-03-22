@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class User extends Model
 {
@@ -37,7 +38,7 @@ class User extends Model
     {
     	$input = Input::all();
     	$input['password'] = Hash::make($input['password']);
-        $input['birth_date'] = date('Y-m-d', strtotime($input['birth_date']));
+        $input['birth_date'] = Carbon::createFromFormat('d/m/Y', $input['birth_date']);
         unset($input['password_confirmation']);
     	$user = new User();
     	$user->fill($input);
